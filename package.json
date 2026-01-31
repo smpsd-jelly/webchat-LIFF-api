@@ -1,0 +1,42 @@
+{
+  "name": "webchat-liff-api",
+  "version": "1.0.0",
+  "description": "\"# webchat-LIFF-api\"",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "engines": {
+      "node": ">=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smpsd-jelly/webchat-LIFF-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smpsd-jelly/webchat-LIFF-api/issues"
+  },
+  "homepage": "https://github.com/smpsd-jelly/webchat-LIFF-api#readme",
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mariadb": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "prisma": "^7.3.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  }
+}
