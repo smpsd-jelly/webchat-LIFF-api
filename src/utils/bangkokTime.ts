@@ -15,5 +15,5 @@ export function toBangkokISO(input: Date | string | number): string {
     hour12: false,
   }).format(d);
 
-  return parts.replace(" ", "T") + "+07:00"; // ✅ สำคัญ: ใส่ offset
+  return parts.replace(" ", "T") + "+07:00"; 
 }

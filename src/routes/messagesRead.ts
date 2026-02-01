@@ -22,7 +22,6 @@ function jsonSafe(value: unknown): unknown {
   return value;
 }
 
-
 router.get("/messages/history", requireUserSession, async (req, res) => {
   const line_user_id = (req as any).user?.line_user_id as string | undefined;
   if (!line_user_id) return res.status(401).json({ message: "unauthorized" });
@@ -53,7 +52,17 @@ router.get("/messages/history", requireUserSession, async (req, res) => {
     },
   });
 
-  return res.json({ messages: jsonSafe(rows) });
+  return res.json({
+    messages: jsonSafe(
+      rows.map((r) => ({
+        ...r,
+        created_at:
+          r.created_at instanceof Date
+            ? r.created_at.toISOString()
+            : String(r.created_at),
+      })),
+    ),
+  });
 });
 
 export default router;

@@ -7,8 +7,8 @@ import authUserRoutes from "./routes/authUser";
 import lineAuthRoutes from "./routes/lineAuth";
 import lineOaInfoRoutes from "./routes/lineOaInfo";
 import messagesRoutes from "./routes/messages";
-import adminInboxRoutes from "./routes/adminInbox";
 import lineWebhookRoutes from "./routes/lineWebhook";
+import adminChatRoutes from "./routes/adminChat"; 
 import messagesReadRoutes from "./routes/messagesRead";
 
 import { initDb } from "./db";
@@ -16,6 +16,7 @@ import { initDb } from "./db";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
 
 const allowOrigins = [
   process.env.WEB_ORIGIN,   
@@ -54,9 +55,9 @@ app.use("/auth", lineOaInfoRoutes);
 
 app.use("/", messagesRoutes);
 app.use("/", messagesReadRoutes);
-app.use("/", adminInboxRoutes);
 
-app.use("/", lineWebhookRoutes);
+app.use("/line", lineWebhookRoutes); 
+app.use("/admin", adminChatRoutes);
 
 async function bootstrap() {
   await initDb();

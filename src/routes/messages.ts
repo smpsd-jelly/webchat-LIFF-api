@@ -14,8 +14,21 @@ router.post("/messages/send", requireUserSession, async (req, res) => {
 
   const conv = await prisma.conversations.upsert({
     where: { line_user_id },
-    update: { status: "open", last_message_at: now },
-    create: { line_user_id, status: "open", last_message_at: now, created_at: now },
+    update: {
+      status: "open",
+      last_message_at: now,
+      last_message_text: msg,
+      unread_admin_count: { increment: 1 },
+    },
+    create: {
+      line_user_id,
+      status: "open",
+      last_message_at: now,
+      last_message_text: msg,
+      unread_admin_count: 1,
+      unread_user_count: 0,
+      created_at: now,
+    },
   });
 
   await prisma.messages.create({
@@ -24,6 +37,7 @@ router.post("/messages/send", requireUserSession, async (req, res) => {
       sender_type: "user",
       text: msg,
       created_at: now,
+      status: "received", 
     },
   });
 

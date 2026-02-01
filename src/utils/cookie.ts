@@ -1,8 +1,14 @@
-export function getCookieOptions(expires?: Date) {
+import type { CookieOptions } from "express";
+
+export function getCookieOptions(expires?: Date): CookieOptions {
+  const isHttps =
+    process.env.COOKIE_SECURE === "true" ||
+    process.env.NODE_ENV === "production";
+
   return {
     httpOnly: true,
-    sameSite: "none" as const, 
-    secure: true,             
+    secure: isHttps,                        
+    sameSite: isHttps ? "none" : "lax",     
     path: "/",
     ...(expires ? { expires } : {}),
   };
