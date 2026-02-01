@@ -4,7 +4,7 @@ CREATE TABLE `line_users` (
     `line_user_id` VARCHAR(64) NOT NULL,
     `display_name` VARCHAR(255) NULL,
     `picture_url` TEXT NULL,
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
     `last_seen_at` DATETIME(0) NULL,
 
     UNIQUE INDEX `line_users_line_user_id_key`(`line_user_id`),
@@ -17,7 +17,7 @@ CREATE TABLE `conversations` (
     `line_user_id` VARCHAR(64) NOT NULL,
     `status` ENUM('open', 'closed') NOT NULL DEFAULT 'open',
     `last_message_at` DATETIME(0) NULL,
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
 
     UNIQUE INDEX `conversations_line_user_id_key`(`line_user_id`),
     PRIMARY KEY (`id`)
@@ -29,7 +29,7 @@ CREATE TABLE `messages` (
     `conversation_id` BIGINT UNSIGNED NOT NULL,
     `sender_type` ENUM('user', 'admin', 'system') NOT NULL,
     `text` TEXT NOT NULL,
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
     `raw_event` JSON NULL,
 
     INDEX `idx_messages_conversation_created`(`conversation_id`, `created_at`),
@@ -39,12 +39,15 @@ CREATE TABLE `messages` (
 -- CreateTable
 CREATE TABLE `admin_users` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `line_user_id` VARCHAR(64) NULL,
+    `display_name` VARCHAR(255) NULL,
+    `picture_url` TEXT NULL,
     `username` VARCHAR(100) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
-    `display_name` VARCHAR(255) NULL,
     `role` ENUM('admin', 'superadmin') NOT NULL DEFAULT 'admin',
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
 
+    UNIQUE INDEX `admin_users_line_user_id_key`(`line_user_id`),
     UNIQUE INDEX `admin_users_username_key`(`username`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -54,7 +57,7 @@ CREATE TABLE `admin_sessions` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `admin_user_id` BIGINT UNSIGNED NOT NULL,
     `session_token` VARCHAR(128) NOT NULL,
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
     `expires_at` DATETIME(0) NOT NULL,
 
     UNIQUE INDEX `admin_sessions_session_token_key`(`session_token`),
@@ -67,7 +70,7 @@ CREATE TABLE `user_sessions` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `line_user_id` VARCHAR(64) NOT NULL,
     `session_token` VARCHAR(128) NOT NULL,
-    `created_at` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+    `created_at` DATETIME(0) NOT NULL,
     `expires_at` DATETIME(0) NOT NULL,
 
     UNIQUE INDEX `user_sessions_session_token_key`(`session_token`),

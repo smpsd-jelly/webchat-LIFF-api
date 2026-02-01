@@ -5,7 +5,11 @@ import { requireUserSession } from "../middlewares/userSession";
 const router = Router();
 
 router.get("/user", requireUserSession, async (req, res) => {
-  const line_user_id = (req as any).line_user_id as string;
+  const line_user_id = (req as any).user?.line_user_id as string | undefined;
+
+  if (!line_user_id) {
+    return res.status(401).json({ message: "unauthorized (no session)" });
+  }
 
   const user = await prisma.line_users.findUnique({
     where: { line_user_id },
@@ -13,12 +17,11 @@ router.get("/user", requireUserSession, async (req, res) => {
       line_user_id: true,
       display_name: true,
       picture_url: true,
-      last_seen_at: true
-    }
+      last_seen_at: true,
+    },
   });
 
   if (!user) return res.status(401).json({ message: "unauthorized" });
-
   return res.json({ ok: true, user });
 });
 
