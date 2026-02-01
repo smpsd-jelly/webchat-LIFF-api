@@ -20,10 +20,7 @@ export async function requireUserSession(
   next: NextFunction,
 ) {
   try {
-  console.log("🔐 requireUserSession called", req.method, req.originalUrl);
-    console.log("🌐 origin:", req.headers.origin);
-    console.log("🍪 cookies:", (req as any).cookies);
-    console.log("📦 headers[x-session-token]:", req.headers["x-session-token"]);
+ 
     const token = pickToken(req);
 
     if (!token) {
@@ -32,14 +29,10 @@ export async function requireUserSession(
       return res.status(401).json({ code: "NO_TOKEN", message: "unauthorized" });
     }
 
-    console.log("🔑 session_token:", token);
-
     const sess = await prisma.user_sessions.findUnique({
       where: { session_token: token },
       select: { line_user_id: true, expires_at: true },
     });
-
-    console.log("🧾 session from DB:", sess);
 
     if (!sess?.line_user_id) {
       console.log("❌ invalid session (not found)");
